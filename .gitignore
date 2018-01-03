@@ -6,3 +6,4 @@ build/
 pmxbot.sqlite
 .tox/
 .cache/
+/prod_config.yaml
