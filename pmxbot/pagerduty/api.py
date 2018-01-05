@@ -24,7 +24,7 @@ refresh_delta = timedelta(hours=1)
 # !tell-oncall <team>: <message> Send a slack <message> to the current primary oncall of <team>
 # !page <team>: <message>: Open a new incident titled <message> and assign it to current primary oncall for <team>
 
-class PagerDutyAPI():
+class PagerDutyAPI:
     _slack_name_pd_id_map = {}  # pmxbot.config['pagerduty']['users']
 
     _REST_API_URL = 'https://api.pagerduty.com'
@@ -39,9 +39,8 @@ class PagerDutyAPI():
 
     escalation_endpoint = 'escalation_policies'
 
-    def __init__(self, pd_api_key, name_map):
+    def __init__(self, pd_api_key):
         self._api_key = pd_api_key
-        self._slack_name_pd_id_map = name_map
         self.incident_active_statuses = [
             self.incident_triggered_status,
             self.incident_ackd_status,
@@ -86,13 +85,6 @@ class PagerDutyAPI():
 
     def _join(self, *args):
         return os.path.join(*[str(arg) for arg in args])
-
-    def user_by_name(self, uname):
-        uid = self._slack_name_pd_id_map.get(uname)
-        if not uid:
-            raise RuntimeError("Couldn't resolve user name: {}".format(uname))
-
-        return self.user_by_id(uid)
 
     def user_by_id(self, uid):
         endpoint = self._join(self.users_endpoint, uid)
@@ -146,7 +138,8 @@ class PagerDutyResponse:
 pd_ids_to_emails = {}
 
 
-def get_email_for_user(uid):
+# Methods
+def get_email_for_user(api, uid):
     """
     Surreal, but true: you can't ack an event by PagerDuty ID. You must use the
     email on file. Neat.
@@ -160,7 +153,6 @@ def get_email_for_user(uid):
             # Email fresh enough, don't re-check
             return maybe_email
 
-    api = PagerDutyAPI()
     try:
         user_json = api.user_by_id(uid)
     except RuntimeError:
@@ -180,8 +172,7 @@ def get_incident_ids(incidents):
     return [i['id'] for i in incidents['incidents']]
 
 
-def ack(uid, to_ack=None):
-    api = PagerDutyAPI()
+def ack(api, uid, to_ack=None):
     ack_from = get_email_for_user(uid)
 
     if not to_ack:
