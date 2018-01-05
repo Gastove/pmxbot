@@ -666,7 +666,7 @@ def rand_bot(channel, nick, rest):
 		'oregontrail',
 		'chain', 'tinytear', 'blame', 'panic', 'rubberstamp', 'dance',
 		'annoy', 'klingon',
-		'storytime', 'murphy', 'quote','lex',
+		'storytime', 'murphy', 'quote',
 	]
 
 	def lookup_command(cmd_name):
