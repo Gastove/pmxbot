@@ -98,15 +98,6 @@ class SQLiteLexicon(Lexicon, storage.SQLiteStorage):
 		for row in self.db.execute(query, [self.lib]):
 			yield {'text': row[0]}
 
-	def export_all(self):
-		query = """
-			SELECT term, library, logid
-			from lexicon
-			left outer join lexicon_log on lexicon.lexiconidid = lexicon_log.lexiconid
-			"""
-		fields = 'text', 'library', 'log_id'
-		return (dict(zip(fields, res)) for res in self.db.execute(query))
-
 
 @command(aliases=("lex","define", "def",))
 def lexicon(rest):
