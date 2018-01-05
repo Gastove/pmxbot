@@ -666,7 +666,7 @@ def rand_bot(channel, nick, rest):
 		'oregontrail',
 		'chain', 'tinytear', 'blame', 'panic', 'rubberstamp', 'dance',
 		'annoy', 'klingon',
-		'storytime', 'murphy', 'quote',
+		'storytime', 'murphy', 'quote','lex',
 	]
 
 	def lookup_command(cmd_name):
@@ -710,29 +710,6 @@ def calc(rest):
 			return "eval failed... check your syntax"
 	else:
 		return "misformatted arithmetic!"
-
-
-@command(aliases="def")
-def define(rest):
-	"Define a word"
-	word = rest.strip()
-	res = util.lookup(word)
-	fmt = (
-		'{lookup.provider} says: {res}' if res else
-		"{lookup.provider} does not have a definition for that.")
-	return fmt.format(**dict(locals(), lookup=util.lookup))
-
-
-@command(
-	aliases=("urb", 'ud', 'urbandictionary', 'urbandefine', 'urbandef', 'urbdef')
-)
-def urbandict(rest):
-	"Define a word with Urban Dictionary"
-	word = rest.strip()
-	definition = util.urban_lookup(word)
-	if not definition:
-		return "Arg!  I didn't find a definition for that."
-	return 'Urban Dictionary says {word}: {definition}'.format(**locals())
 
 
 @command("acronym", aliases=("ac",))
