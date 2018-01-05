@@ -5,11 +5,8 @@ from pagerduty.api import PagerDutyAPI
 import pagerduty.api as api
 
 
-def initialize():
-    global slack_name_pd_id_map
-    global pd_api
-    slack_name_pd_id_map = pmxbot.config['pagerduty']['users']
-    pd_api = PagerDutyAPI(pmxbot.config['pagerduty']['token'])
+slack_name_pd_id_map = pmxbot.config['pagerduty']['users']
+pd_api = PagerDutyAPI(pmxbot.config['pagerduty']['token'])
 
 
 def _user_by_name(uname):
